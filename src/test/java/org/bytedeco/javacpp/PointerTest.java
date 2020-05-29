@@ -22,6 +22,7 @@
 package org.bytedeco.javacpp;
 
 import java.io.File;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
@@ -1045,5 +1046,59 @@ public class PointerTest {
         } catch (NumberFormatException e) {
             System.out.println(e);
         }
+    }
+
+    @Test public void testAsBuffer() {
+        Pointer p = new Pointer(ByteBuffer.allocate(0));
+        Buffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
+    }
+
+    @Test public void testAsBuffer0() {
+        FloatPointer p = new FloatPointer(0L);
+        FloatBuffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
+    }
+
+    @Test public void testAsBuffer1() {
+        FloatPointer p = new FloatPointer(new float[]{});
+        FloatBuffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
+    }
+
+    @Test public void testAsBuffer2() {
+        FloatPointer p = new FloatPointer(FloatBuffer.wrap(new float[]{}));
+        FloatBuffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
+    }
+
+    @Test public void testAsBuffer3() {
+        FloatPointer p = new FloatPointer(FloatBuffer.allocate(0));
+        FloatBuffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
+    }
+
+    @Test public void testAsBuffer4() {
+        FloatPointer p = new FloatPointer(ByteBuffer.allocateDirect(0).asFloatBuffer());
+        FloatBuffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
     }
 }
