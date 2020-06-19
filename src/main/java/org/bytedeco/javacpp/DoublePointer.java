@@ -76,18 +76,21 @@ public class DoublePointer extends Pointer {
      * @param size the number of {@code double} elements to allocate
      */
     public DoublePointer(long size) {
-        try {
-            allocateArray(size);
-            if (size > 0 && address == 0) {
-                throw new OutOfMemoryError("Native allocator returned address == 0");
+        if (size > 0L) {
+            try {
+                allocateArray(size);
+                if (size > 0 && address == 0) {
+                    throw new OutOfMemoryError("Native allocator returned address == 0");
+                }
+            } catch (UnsatisfiedLinkError e) {
+                throw new RuntimeException("No native JavaCPP library in memory. (Has Loader.load() been called?)", e);
+            } catch (OutOfMemoryError e) {
+                OutOfMemoryError e2 = new OutOfMemoryError("Cannot allocate new DoublePointer(" + size + "): "
+                        + "totalBytes = " + formatBytes(totalBytes()) + ", physicalBytes = " + formatBytes(
+                        physicalBytes()));
+                e2.initCause(e);
+                throw e2;
             }
-        } catch (UnsatisfiedLinkError e) {
-            throw new RuntimeException("No native JavaCPP library in memory. (Has Loader.load() been called?)", e);
-        } catch (OutOfMemoryError e) {
-            OutOfMemoryError e2 = new OutOfMemoryError("Cannot allocate new DoublePointer(" + size + "): "
-                    + "totalBytes = " + formatBytes(totalBytes()) + ", physicalBytes = " + formatBytes(physicalBytes()));
-            e2.initCause(e);
-            throw e2;
         }
     }
     /** @see Pointer#Pointer() */

@@ -812,6 +812,13 @@ public class Pointer implements AutoCloseable {
         if (limit > 0 && limit < position) {
             throw new IllegalArgumentException("limit < position: (" + limit + " < " + position + ")");
         }
+        if (limit == 0 && position == 0) {
+            return new Pointer()
+                    .position(0)
+                    .limit(0)
+                    .capacity(0)
+                    .asDirectBuffer().order(ByteOrder.nativeOrder());
+        }
         int size = sizeof();
         Pointer p = new Pointer();
         p.address = address;

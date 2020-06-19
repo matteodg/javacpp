@@ -1057,6 +1057,15 @@ public class PointerTest {
         assertEquals(0, buffer.limit());
     }
 
+    @Test public void testAsBufferDirect() {
+        Pointer p = new Pointer(ByteBuffer.allocateDirect(0));
+        Buffer buffer = p.asBuffer();
+        assertNotNull(buffer);
+        assertEquals(0, buffer.capacity());
+        assertEquals(0, buffer.position());
+        assertEquals(0, buffer.limit());
+    }
+
     @Test public void testAsBuffer0() {
         FloatPointer p = new FloatPointer(0L);
         FloatBuffer buffer = p.asBuffer();
